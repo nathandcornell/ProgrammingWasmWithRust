@@ -312,14 +312,14 @@
     (call $setPiece (local.get $toX) (local.get $toY) (local.get $piece))
     (call $setEmpty (local.get $fromX) (local.get $fromY))
 
-    ;; Crown the piece, if warranted
-    (if (call $canCrown (local.get $toY) (local.get $piece))
-      (then (call $crownPiece (local.get $toX) (local.get $toY)))
-    )
-
     ;; Emit a notification
     (call $notify_piece_moved (local.get $fromX) (local.get $fromY)
                               (local.get $toX) (local.get $toY)
+    )
+
+    ;; Crown the piece, if warranted
+    (if (call $canCrown (local.get $toY) (local.get $piece))
+      (then (call $crownPiece (local.get $toX) (local.get $toY)))
     )
 
     ;; Toggle the turn owner
