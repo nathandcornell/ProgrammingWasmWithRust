@@ -387,4 +387,12 @@
     ;; Start the turn with Black
     (call $setTurnOwner (global.get $BLACK))
   )
+
+  (; Exports ;)
+  (export "getPiece" (func $getPiece))
+  (export "isCrowned" (func $isCrowned))
+  (export "initBoard" (func $initBoard))
+  (export "getTurnOwner" (func $getTurnOwner))
+  (export "move" (func $move))
+  (export "memory" (memory $mem))
 )
