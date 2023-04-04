@@ -1,7 +1,9 @@
-const START_INDEX: usize = 0;
-const END_INDEX: usize = 7;
+use std::cmp::Ordering;
 
-#[derive(Copy, Clone, Debug, PartialEq)]
+pub const START_INDEX: usize = 0;
+pub const END_INDEX: usize = 7;
+
+#[derive(Copy, Clone, Debug, Eq, Hash, PartialEq)]
 pub enum PieceColor {
     Black,
     White,
@@ -14,13 +16,13 @@ pub struct Delta {
 
 // Helper for calculating possible moves and jumps
 const MOVE_DIRS: [Delta; 4] = [
-    Delta { x: -1, y: 0 },
+    Delta { x: -1, y: 1 },
     Delta { x: -1, y: -1 },
-    Delta { x: 0, y: 1 },
+    Delta { x: 1, y: -1 },
     Delta { x: 1, y: 1 },
 ];
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct GamePiece {
     pub color: PieceColor,
     pub crowned: bool,
@@ -42,7 +44,7 @@ impl GamePiece {
     }
 }
 
-#[derive(Clone, Copy, Debug, PartialEq)]
+#[derive(Clone, Copy, Debug, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub struct Coordinate(pub usize, pub usize);
 
 impl Coordinate {
@@ -56,8 +58,8 @@ impl Coordinate {
         let Coordinate(x, y) = *self;
 
         for delta in MOVE_DIRS {
-            let new_y: i8 = x as i8 + delta.x * distance;
-            let new_x: i8 = y as i8 + delta.y * distance;
+            let new_x: i8 = x as i8 + delta.x * distance;
+            let new_y: i8 = y as i8 + delta.y * distance;
 
             // TODO: We could probably simplify this with some better
             // typecasting to usize (min usize is 0)
@@ -69,7 +71,7 @@ impl Coordinate {
             }
         }
 
-        return moves;
+        moves
     }
 
     pub fn valid_moves(&self) -> impl Iterator<Item = Coordinate> {
@@ -83,9 +85,30 @@ impl Coordinate {
 
         jumps.into_iter()
     }
+
+    pub fn hash(&self) -> String {
+        format!("{},{}", self.0, self.1)
+    }
+
+    pub fn cmp(&self, other: &Coordinate) -> Ordering {
+        let Coordinate(a_x, a_y) = self;
+        let Coordinate(b_x, b_y) = other;
+
+        if a_x > b_x {
+            Ordering::Greater
+        } else if a_x < b_x {
+            Ordering::Less
+        } else if a_y == b_y {
+            Ordering::Equal
+        } else if a_y > b_y {
+            Ordering::Greater
+        } else {
+            Ordering::Less
+        }
+    }
 }
 
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, Eq, Debug, Ord, PartialEq, PartialOrd)]
 pub struct Move {
     pub from: Coordinate,
     pub to: Coordinate,
@@ -96,6 +119,20 @@ impl Move {
         Move {
             from: Coordinate(from.0, from.1),
             to: Coordinate(to.0, to.1),
+        }
+    }
+
+    pub fn cmp(&self, other: &Move) -> Ordering {
+        if self.from > other.from {
+            Ordering::Greater
+        } else if self.from < other.from {
+            Ordering::Less
+        } else if self.to > other.to {
+            Ordering::Greater
+        } else if self.to < other.to {
+            Ordering::Less
+        } else {
+            Ordering::Equal
         }
     }
 }
