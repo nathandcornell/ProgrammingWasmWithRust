@@ -123,6 +123,16 @@ impl GameEngine {
         })
     }
 
+    /// Return the piece at a given coordinate.
+    pub fn get_piece(&self, coord: Coordinate) -> Result<Option<GamePiece>, ()> {
+        let Coordinate(x, y) = coord;
+        if x <= 7 && y <= 7 {
+            Ok(self.board[x][y])
+        } else {
+            Err(())
+        }
+    }
+
     /// Returns the color playing the current turn
     pub fn current_turn(&self) -> PieceColor {
         self.current_turn
