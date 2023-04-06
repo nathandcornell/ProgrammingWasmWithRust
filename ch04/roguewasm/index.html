@@ -1,0 +1,49 @@
+<html>
+  <head>
+    <meta content="text/html;charset=utf-8" heep-equiv="Content-Type">
+    <title>Rogue WebAssembly</title>
+    <style>
+      .row {
+        display: flex;
+      }
+      .row-cell {
+        flex: 1;
+      }
+      #stats-container {
+        padding: 15px;
+      }
+      #stats-title {
+      }
+      #hit-point-divider {
+        margin: 0 1em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="row">
+      <h1>Rogue WebAssembly</h1>
+    </div>
+    <div class="row">
+      <div class="row-cell" id="rogue-canvas"></div>
+      <div class="row-cell" id="stats-container">
+        <div class="row-cell" id="stats-title">
+          <h2>Stats</h2>
+        </div>
+        <p>
+          <span id="hit-points-title">
+            <h3>Hit Points:</h3>
+          </span>
+          <span id="hit-points">0</span>
+          <span id="hit-point-divider">/</span>
+          <span id="max-hitpoints">0</span>
+        </p>
+        <p>
+          <span>
+            <h3>Moves:</h3>
+          </span>
+          <span id="move-counter">0</span>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
