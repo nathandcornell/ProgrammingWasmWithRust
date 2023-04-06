@@ -8,6 +8,9 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
         filename: 'index.js',
     },
+    experiments: {
+        asyncWebAssembly: true,
+    },
     plugins: [
         new HtmlWebpackPlugin(),
         // This helps some versions of MS Edge with don't have TextEncoder or TextDecoder.
