@@ -3,10 +3,17 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = {
-    entry: './index.js',
+    entry: './index.ts',
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'index.js',
+    },
+    rules: {
+        use: 'ts-loader',
+        exclude: /node_modules/,
+    },
+    resolve: {
+        extensions: ['tsx', '.ts', '.js']
     },
     experiments: {
         asyncWebAssembly: true,

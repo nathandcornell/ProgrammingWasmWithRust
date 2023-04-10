@@ -1,0 +1,21 @@
+{
+  "compilerOptions" : {
+    "lib": ["es6", "dom"],
+    "module": "commonjs",
+    "outDir": "dist",
+    "sourceMap": true,
+    "strict": true,
+    "target": "esnext"
+  },
+  "include": [
+    "./*.ts"
+  ],
+  "exclude": [
+    "**/*.js",
+    "./build",
+    "./dist",
+    "./src",
+    "./target",
+    "./node_modules",
+  ]
+}
