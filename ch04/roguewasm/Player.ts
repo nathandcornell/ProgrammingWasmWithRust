@@ -23,17 +23,7 @@ export default class Player {
   getColor = () => this.color
 
   act = () => {
-    // Lock game engine
-
-    // Listen for keypress
-
-    // Move or Open Box
-
-    // If move, validate open space and redraw character
-
-    // If open, call gameEngine openBox
-
-    // Unlock game engine
+    this.actionHandler.act(this)
   }
 
   handleEvent = () => {

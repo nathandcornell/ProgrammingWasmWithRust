@@ -23,12 +23,6 @@ export default class Borrowmir {
   getColor = () => this.color
 
   act = () => {
-    // Get player location
-    // Generate A* path to player
-    // Move to next step in the path
-    // If coordinates match player coordinates, end the game
-  }
-
-  move = (playerCoordinates: Point) => {
+    this.actionHandler.act(this)
   }
 }

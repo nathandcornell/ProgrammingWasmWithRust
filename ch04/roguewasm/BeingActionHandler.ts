@@ -51,6 +51,7 @@ export default class BeingActionHandler {
     const passCallback = (x: number, y: number) => {
       return this.gameEngine.free_cell(x, y)
     }
+
     const pathCallback = (x: number, y: number) => {
       path.push(new Point(x, y))
     }

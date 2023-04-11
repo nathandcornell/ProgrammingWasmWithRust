@@ -10,6 +10,26 @@ import Point from "./Point"
 const WINDOW_WIDTH: number = 125
 const WINDOW_HEIGHT: number = 40
 
+export type Stats = {
+  hitPoints: number
+  maxHitpoints: number
+  moves: number
+}
+
+export function stats_updated(stats: Stats) {
+  let hitPoints = document.getElementById("hitpoints")
+  let maxHitpoints = document.getElementById("max_hitpoints")
+  let moves = document.getElementById("moves")
+
+  if (!hitPoints || !maxHitpoints || !moves) {
+    return
+  }
+
+  hitPoints.textContent = stats.hitPoints.toString()
+  maxHitpoints.textContent = stats.maxHitpoints.toString()
+  moves.textContent = stats.moves.toString()
+}
+
 const runGame = () => {
   const dimensions = { height: WINDOW_WIDTH, width: WINDOW_WIDTH }
   const display = new Display({width: dimensions.width, height: dimensions.height})
