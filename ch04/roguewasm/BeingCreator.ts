@@ -1,8 +1,7 @@
 import { Being, GameEngine } from "./roguewasm"
 import Borrowmir from "./Borrowmir"
 import Player from "./Player"
-import { Display, RNG as RandomNumberGenerator } from "rot-js"
-import Point from "./Point"
+import { Display } from "rot-js"
 import FreeCells from "./FreeCells"
 import BeingActionHandler from "./BeingActionHandler"
 
@@ -21,7 +20,7 @@ export default class BeingCreator {
     const player = new Player(this.actionHandler)
 
     const coordinates = freeCells.popRandomCell()
-    const being = new Being(coordinates.x, coordinates.y, player.getCharacter, player.getColor, this.display)
+    const being = new Being(coordinates.x, coordinates.y, player.getCharacter(), player.getColor(), this.display)
     being.draw()
     player.setBeing(being)
 
@@ -32,7 +31,7 @@ export default class BeingCreator {
     const enemy = new Borrowmir(this.actionHandler)
 
     const coordinates = freeCells.popRandomCell()
-    const being = new Being(coordinates.x, coordinates.y, enemy.getCharacter, enemy.getColor, this.display)
+    const being = new Being(coordinates.x, coordinates.y, enemy.getCharacter(), enemy.getColor(), this.display)
     being.draw()
     enemy.setBeing(being)
 

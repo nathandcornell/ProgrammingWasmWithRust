@@ -8,9 +8,13 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
         filename: 'index.js',
     },
-    rules: {
-        use: 'ts-loader',
-        exclude: /node_modules/,
+    devtool: 'inline-source-map',
+    module: {
+        rules: [{
+            test: /\.ts?$/,
+            use: 'ts-loader',
+            exclude: /node_modules/,
+        }]
     },
     resolve: {
         extensions: ['tsx', '.ts', '.js']
@@ -19,12 +23,18 @@ module.exports = {
         asyncWebAssembly: true,
     },
     plugins: [
-        new HtmlWebpackPlugin(),
+        new HtmlWebpackPlugin({
+            template: path.resolve(__dirname, 'index.html')
+        }),
         // This helps some versions of MS Edge with don't have TextEncoder or TextDecoder.
         new webpack.ProvidePlugin({
             TextDecoder: ['text-encoding', 'TextDecoder'],
             TextEncoder: ['text-encoding', 'TextEncoder']
         })
     ],
+    output: {
+        path: path.resolve(__dirname, 'dist'),
+        filename: 'index.js',
+    },
     mode: 'development'
 };

@@ -1,6 +1,9 @@
 {
   "scripts": {
-    "build": "webpack",
+    "build": "yarn build-rust && yarn build-bindgen && yarn build-ts",
+    "build-ts": "webpack",
+    "build-rust": "cargo build --target wasm32-unknown-unknown",
+    "build-bindgen": "wasm-bindgen target/wasm32-unknown-unknown/debug/roguewasm.wasm --out-dir .",
     "serve": "webpack-dev-server"
   },
   "devDependencies": {

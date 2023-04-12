@@ -2,6 +2,7 @@
 extern crate serde_derive;
 
 extern crate wasm_bindgen;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use wasm_bindgen::prelude::*;
 
@@ -31,7 +32,7 @@ struct GridPoint {
     y: i32,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 pub struct Stats {
     pub hitpoints: i32,
     pub max_hitpoints: i32,
@@ -39,7 +40,7 @@ pub struct Stats {
 }
 
 #[wasm_bindgen]
-pub struct PlayerCore {
+pub struct Being {
     location: GridPoint,
     moves: i32,
     display: Display,
@@ -50,10 +51,10 @@ pub struct PlayerCore {
 }
 
 #[wasm_bindgen]
-impl PlayerCore {
+impl Being {
     #[wasm_bindgen(constructor)]
-    pub fn new(x: i32, y: i32, icon: &str, color: &str, display: Display) -> PlayerCore {
-        PlayerCore {
+    pub fn new(x: i32, y: i32, icon: &str, color: &str, display: Display) -> Being {
+        Being {
             location: GridPoint { x, y },
             display,
             moves: 0,
@@ -93,7 +94,9 @@ impl PlayerCore {
             moves: self.moves,
         };
 
-        stats_updated(JsValue::from_serde(&stats).unwrap());
+        let js_value = serde_wasm_bindgen::to_value(&stats);
+
+        stats_updated(js_value.unwrap());
     }
 
     pub fn take_damage(&mut self, damage: i32) -> i32 {
@@ -104,17 +107,17 @@ impl PlayerCore {
 }
 
 #[wasm_bindgen]
-pub struct Engine {
+pub struct GameEngine {
     display: Display,
     points: HashMap<GridPoint, String>,
     prize_location: Option<GridPoint>,
 }
 
 #[wasm_bindgen]
-impl Engine {
+impl GameEngine {
     #[wasm_bindgen(constructor)]
-    pub fn new(display: Display) -> Engine {
-        Engine {
+    pub fn new(display: Display) -> GameEngine {
+        GameEngine {
             display,
             points: HashMap::new(),
             prize_location: None,
@@ -149,7 +152,8 @@ impl Engine {
         self.points.insert(grid_point, "*".to_owned());
     }
 
-    pub fn open_box(&mut self, player: &mut PlayerCore, x: i32, y: i32) {
+    pub fn open_box(&mut self, player: &mut Being) {
+        let [x, y] = [player.x(), player.y()];
         let grid_point = GridPoint { x, y };
 
         {
@@ -189,11 +193,11 @@ impl Engine {
         }
     }
 
-    pub fn move_player(&mut self, player: &mut PlayerCore, x: i32, y: i32) {
-        // replace player icon with what's underneath
-        self.redraw_at(player.x(), player.y());
+    pub fn move_being(&mut self, being: &mut Being, x: i32, y: i32) {
+        // replace being icon with what's underneath
+        self.redraw_at(being.x(), being.y());
 
-        player.move_to(x, y);
+        being.move_to(x, y);
     }
 
     pub fn free_cell(&self, x: i32, y: i32) -> bool {

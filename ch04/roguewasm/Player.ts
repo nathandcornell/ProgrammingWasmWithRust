@@ -17,8 +17,20 @@ export default class Player {
     this.being = being
   }
 
-  getX = (): number => this.being.x
-  getY = (): number => this.being.y
+  getX = (): number => {
+    if (!this.being) {
+      throw new Error('Player is missing a being!')
+    }
+
+    return this.being.x()
+  }
+  getY = (): number => {
+    if (!this.being) {
+      throw new Error('Player is missing a being!')
+    }
+
+    return this.being.y()
+  }
   getCharacter = () => this.character
   getColor = () => this.color
 

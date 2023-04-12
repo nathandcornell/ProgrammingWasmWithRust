@@ -1,6 +1,4 @@
-import { Being, Engine } from "./roguewasm"
-import Point from "./Point"
-import { Display, Path } from "rot-js"
+import { Being } from "./roguewasm"
 import BeingActionHandler from "./BeingActionHandler"
 
 export default class Borrowmir {
@@ -17,8 +15,20 @@ export default class Borrowmir {
     this.being = being
   }
 
-  getX = (): number => this.being.x
-  getY = (): number => this.being.y
+  getX = (): number => {
+    if (!this.being) {
+      throw new Error('Enemy is missing a being!')
+    }
+
+    return this.being.x()
+  }
+  getY = (): number => {
+    if (!this.being) {
+      throw new Error('Enemy is missing a being!')
+    }
+
+    return this.being.y()
+  }
   getCharacter = () => this.character
   getColor = () => this.color
 

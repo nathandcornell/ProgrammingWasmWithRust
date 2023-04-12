@@ -1,10 +1,9 @@
 import { DIRS, Display, Engine as RotEngine, Path } from "rot-js"
 import Borrowmir from "./Borrowmir"
-import { GameContext } from "./Game"
 import Player from "./Player"
 import PlayerTracker from "./PlayerTracker"
 import Point from "./Point"
-import { Being, GameEngine } from "./roguewasm"
+import { GameEngine } from "./roguewasm"
 
 export enum ActionType {
   Move,
@@ -58,6 +57,11 @@ export default class BeingActionHandler {
 
     const pathFinder = new Path.AStar(x, y, passCallback, { topology: 4 })
 
+    if (!enemy.being) {
+      // TODO: Something smarter here
+      return
+    }
+
     pathFinder.compute(enemy.being.x(), enemy.being.y(), pathCallback)
 
     let nextMove = path.shift()
@@ -74,6 +78,10 @@ export default class BeingActionHandler {
   }
 
   openBox(player: Player) {
+    if (!player.being) {
+      throw new Error('Player is missing a being!')
+    }
+
     this.gameEngine.open_box(player.being)
   }
 
@@ -86,15 +94,20 @@ export default class BeingActionHandler {
     const newX = player.getX() + xDelta
     const newY = player.getY() + yDelta
 
-    return this.moveActor(player.being, newX, newY)
+    return this.moveActor(player, newX, newY)
   }
 
   moveActor(actor: Player | Borrowmir, x: number, y: number) {
     const being = actor.being
 
-    if (!this.gameEngine.free_cell(x, y)) { return }
+    if (!being) {
+      throw new Error('Actor is missing a being!')
+    }
 
-    this.gameEngine.move_player(being, x, y)
+
+    if (!this.gameEngine.free_cell(x, y) || !being) { return }
+
+    this.gameEngine.move_being(being, x, y)
   }
 
   getKeydownHandler(player: Player): (event: KeyboardEvent) => void {

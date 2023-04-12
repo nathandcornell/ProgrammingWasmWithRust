@@ -5,7 +5,8 @@ import PlayerTracker from "./PlayerTracker"
 import FreeCells from "./FreeCells"
 import Point from "./Point"
 
-import { Engine as RotEngine, Map, Scheduler } from "rot-js"
+import { Engine as RotEngine, Map } from "rot-js"
+import Simple from "rot-js/lib/scheduler/simple"
 import { GameEngine } from "./roguewasm"
 
 export type Dimensions = {
@@ -17,7 +18,7 @@ export type GameContext = {
   freeCells: FreeCells,
   gameEngine: GameEngine,
   rotEngine: RotEngine,
-  scheduler: Scheduler
+  scheduler: Simple
 }
 
 export default class Game {
@@ -67,7 +68,7 @@ export default class Game {
       this.context.gameEngine.place_box(randomCell.x, randomCell.y);
 
       if (i == 9) {
-        this.context.gameEngine.mark_wasmprize(randomCell.x, randomCell.y);
+        this.context.gameEngine.mark_prize(randomCell.x, randomCell.y);
       }
     }
   }
